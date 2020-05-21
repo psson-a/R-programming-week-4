@@ -31,6 +31,6 @@ rankhospital <- function(state, outcome, num = "best"){
    #best_hospitals[1]
    
    if (num == "best") return (state_hospitals[1,'Hospital.Name'])
-   else if (num =="worst") return (state_hospitals[length(state_hospitals),'Hospital.Name'])
+   else if (num =="worst") return (state_hospitals[nrow(state_hospitals),'Hospital.Name'])
    else return (state_hospitals[num,'Hospital.Name'])
 }
