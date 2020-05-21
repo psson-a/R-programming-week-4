@@ -31,6 +31,6 @@ rankall <- function(outcome, num = "best") {
       else hosp_rank <- c(hosp_rank, hospital[num,'Hospital.Name'])
    }
    answer=data.frame(hospital=hosp_rank, state=states)
-   #answer <- hosp_rank
+   row.names(answer) <-answer$state
    answer
 }
