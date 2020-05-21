@@ -12,28 +12,25 @@ rankall <- function(outcome, num = "best") {
    ## For each state, find the hospital of the given rank
    hospitals <- split(outcomes, outcomes[['State']])
    
-   states <- list(NULL)
-   hosp_rank <- list(NULL)
-   
-   for (hospital in hospitals){
-      states <- c(states, hospital[1, 'State'])
-   }
-   return(states)
-   state_hospitals <- outcomes[outcomes[['State']] == state,]
-   #state_hospitals[['Hospital.Name']]
+   states <- character()
+   hosp_rank <- character()
    
    if (outcome == "heart attack") column <- "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack"
    else if (outcome == "heart failure") column <- "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure"
    else if (outcome == "pneumonia") column <- "Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia"
    
-   state_hospitals[[column]] <- suppressWarnings(as.numeric(state_hospitals[[column]]))
-   state_hospitals <- state_hospitals[!is.na(state_hospitals[[column]]), ]
-   state_hospitals <- state_hospitals[order(state_hospitals[[column]], state_hospitals[['Hospital.Name']]),]
-   hospitals <- split(outcomes, outcomes[['State']])
-
    
-   if (num == "best") return (state_hospitals[1,'Hospital.Name'])
-   else if (num =="worst") return (state_hospitals[nrow(state_hospitals),'Hospital.Name'])
-   else return (state_hospitals[num,'Hospital.Name'])
-   ## Return a data frame with the hospital names and the
-   ## (abbreviated) state name
+   for (hospital in hospitals){
+      states <- c(states, hospital[1, 'State'])
+      
+      hospital[[column]] <- suppressWarnings(as.numeric(hospital[[column]]))
+      hospital <- hospital[!is.na(hospital[[column]]), ]
+      hospital <- hospital[order(hospital[[column]], hospital[['Hospital.Name']]),]
+      if (num == "best") hosp_rank <- c(hosp_rank, hospital[1,'Hospital.Name'])
+      else if (num =="worst") hosp_rank <- c(hosp_rank, hospital[nrow(hospital),'Hospital.Name'])
+      else hosp_rank <- c(hosp_rank, hospital[num,'Hospital.Name'])
+   }
+   answer=data.frame(hospital=hosp_rank, state=states)
+   #answer <- hosp_rank
+   answer
+}
